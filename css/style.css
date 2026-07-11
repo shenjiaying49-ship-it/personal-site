@@ -1,0 +1,1179 @@
+:root {
+  --color-bg: #ffffff;
+  --color-fg: #0a0a0a;
+  --color-muted: #8a8f98;
+  --color-accent: #0047ff;
+  --color-accent-light: #0047ff;
+  --color-accent-deep: #0047ff;
+
+  --font-display: 'Lexend', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-label: 'Fira Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html, body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* ---------- burger ---------- */
+
+.burger {
+  position: fixed;
+  top: 40px;
+  right: 40px;
+  width: 32px;
+  height: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+.burger__line {
+  height: 2px;
+  width: 100%;
+  background: var(--color-fg);
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.burger.is-open .burger__line:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+.burger.is-open .burger__line:nth-child(2) {
+  opacity: 0;
+}
+.burger.is-open .burger__line:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* ---------- nav overlay ---------- */
+
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-fg);
+  color: var(--color-bg);
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  transform: translateY(-100%);
+  transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.nav-overlay.is-open {
+  transform: translateY(0);
+}
+
+.nav-overlay__list {
+  list-style: none;
+  text-align: center;
+}
+
+.nav-overlay__list li {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.nav-overlay__note {
+  font-family: var(--font-label);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+/* ================================================
+   Hero stage：浅色层 + 光标遮罩深色层
+   ================================================ */
+
+.hero-stage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  cursor: none;
+}
+
+.s-hero,
+.s-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- 浅色层：默认可见 ---------- */
+
+.s-hero {
+  background: var(--color-bg);
+  color: var(--color-fg);
+}
+
+.s__center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.s__name {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(4rem, 16vw, 14rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+
+.s__name--echo {
+  color: var(--color-accent);
+}
+
+.s__persona {
+  margin-top: clamp(28px, 4vw, 56px);
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: clamp(0.8rem, 1.4vw, 1.15rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.s__persona--spacer {
+  visibility: hidden;
+}
+
+.s__catcher {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding-bottom: 2.5vw;
+
+  font-family: var(--font-label);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1rem, 2.2vw, 1.8rem);
+  text-align: center;
+  color: var(--color-muted);
+}
+
+/* ---------- 深色层：只在光标遮罩范围内可见 ---------- */
+
+.s-scene {
+  background: var(--color-fg);
+  color: var(--color-bg);
+  /* mask-image 由 js/main.js 逐帧生成（拖尾式显现），这里给一个初始的全隐藏兜底 */
+  -webkit-mask-image: radial-gradient(circle 0px at -999px -999px, white 0%, transparent 100%);
+  mask-image: radial-gradient(circle 0px at -999px -999px, white 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.s__title {
+  position: absolute;
+  top: 3vw;
+  left: 3vw;
+  right: 3vw;
+
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0px, 0.3vw, 6px);
+}
+
+.s__title__line {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3rem, 11vw, 12rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  align-self: flex-start;
+}
+
+/* 两行字体粗细完全一致，只靠左右错位制造错落感，都紧贴在顶部。 */
+.s__title__line:nth-child(2) {
+  align-self: flex-end;
+}
+
+.s__bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding-bottom: 1.5vw;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0px, 0.6vw, 10px);
+}
+
+.s__dreamer {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3rem, 11vw, 12rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-align: center;
+}
+
+.s__word {
+  text-align: center;
+
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(3rem, 11vw, 11rem);
+  letter-spacing: 0.02em;
+
+  /* 深浅交替的渐变条带，clip 到文字形状上，再让它水平移动，
+     形成一道"划过去"的高光扫过整个词的效果。 */
+  background-image: linear-gradient(
+    100deg,
+    var(--color-accent-deep) 20%,
+    var(--color-accent) 38%,
+    #ffffff 50%,
+    var(--color-accent) 62%,
+    var(--color-accent-light) 80%
+  );
+  background-size: 300% 100%;
+  background-position: 200% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: word-sweep 3.5s ease-in-out infinite;
+}
+
+@keyframes word-sweep {
+  0% { background-position: 220% 0; }
+  100% { background-position: -120% 0; }
+}
+
+/* ---------- 自定义光标 ---------- */
+
+.cursor {
+  position: fixed;
+  top: -5px;
+  left: -5px;
+  z-index: 2;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  mix-blend-mode: difference;
+  transform: translate3d(var(--x, 0), var(--y, 0), 0);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.hero-stage__scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  z-index: 1;
+}
+
+@media (hover: none) {
+  .hero-stage { cursor: auto; }
+  .cursor { display: none; }
+}
+
+/* ================================================
+   Projects：环形 logo 板块
+   ================================================ */
+
+.projects {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 5vw, 56px);
+  padding: 7vh 3vw;
+  background: var(--color-bg);
+}
+
+.projects__top {
+  text-align: center;
+  max-width: 46ch;
+
+  opacity: 0;
+  transform: translateY(-64px);
+  transition: opacity 1.1s ease, transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.projects.is-revealed .projects__top {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.projects__eyebrow {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+  letter-spacing: -0.02em;
+  color: var(--color-fg);
+}
+
+/* 点一个 logo，这里出现一句话说明那段经历；不点的时候是提示语 */
+.projects__banner {
+  margin-top: 10px;
+  font-family: var(--font-label);
+  font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+  color: var(--color-muted);
+  transition: opacity 0.2s ease;
+}
+
+.projects__banner.is-flash {
+  color: var(--color-accent);
+}
+
+.projects__banner-title {
+  font-weight: 700;
+  color: var(--color-fg);
+}
+
+.projects__ring {
+  position: relative;
+  width: min(90vw, 1020px);
+  aspect-ratio: 1;
+  --ring-radius: clamp(180px, 30vw, 400px);
+  /* 环形节点分布偏下半圈，卡片+文字标签又比头像顶部留白重，视觉重心
+     天然往下坠，所以整体往上挪一点找平衡。 */
+  margin-top: -6vh;
+}
+
+.projects__avatar {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: clamp(320px, 48vw, 560px);
+  aspect-ratio: 1;
+  cursor: pointer;
+
+  opacity: 0;
+  transform: scale(0.35);
+  transition: opacity 1s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 不要卡片/边框，就是人物本身浮在页面上——视频背景已经合成成白色，跟
+   页面底色一致，所以不铺白底、不裁切、不加阴影，直接整段显示。 */
+.projects__avatar-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.projects.is-revealed .projects__avatar {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 1s ease, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.projects__avatar.is-poked {
+  animation: avatar-poke 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes avatar-poke {
+  0% { transform: scale(1) rotate(0deg); }
+  40% { transform: scale(0.94) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+/* 头像其实是两个叠在一起的 <video>，切视频的时候用 opacity 交叉淡化，
+   不是直接换 src——直接换 src 会有一瞬间没有画面、露出页面白底，看起来
+   像"闪白"。两个视频轮流当"台前"（.is-active）和"后台"（提前把下一段
+   加载好、播放到能出画面再淡入），交叉的时候两边同时有画面，不会露底。 */
+.projects__avatar-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.projects__avatar-img.is-active {
+  opacity: 1;
+}
+
+/* 旁边飘的小 emoji，跟着中间表情一起换——参考图片里就是这种裸露的
+   emoji 贴在头像旁边，不额外套卡片背景。 */
+.projects__avatar-badge {
+  position: absolute;
+  top: 0%;
+  left: -6%;
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  line-height: 1;
+  filter: drop-shadow(0 6px 10px rgba(10, 10, 10, 0.18));
+  pointer-events: none;
+
+  opacity: 0;
+  transform: scale(0.3) rotate(-20deg);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: badge-float 4s ease-in-out infinite;
+}
+
+.projects.is-revealed .projects__avatar-badge {
+  opacity: 1;
+  transform: scale(1) rotate(-8deg);
+}
+
+.projects__avatar-badge.is-popping {
+  animation: badge-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), badge-float 4s ease-in-out infinite 0.45s;
+}
+
+@keyframes badge-pop {
+  0% { transform: scale(0.3) rotate(-20deg); }
+  60% { transform: scale(1.25) rotate(6deg); }
+  100% { transform: scale(1) rotate(-8deg); }
+}
+
+@keyframes badge-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -8px; }
+}
+
+/* 头像旁边随机飘的可爱小图标，纯装饰，跟表情徽章是两回事——JS 每隔几秒
+   在这层里生成一个，往上飘一段淡出后自己从 DOM 里移除。 */
+.projects__float-layer {
+  position: absolute;
+  inset: -18%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.projects__float-icon {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 4px 8px rgba(10, 10, 10, 0.12));
+  animation: float-icon-drift 3.4s ease-out forwards;
+}
+
+@keyframes float-icon-drift {
+  0% { opacity: 0; transform: translate(-50%, -50%) translateY(0) scale(0.4) rotate(-10deg); }
+  18% { opacity: 1; transform: translate(-50%, -50%) translateY(-8px) scale(1) rotate(4deg); }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--drift-x, 0px)), -50%) translateY(-86px) scale(0.8) rotate(10deg);
+  }
+}
+
+.projects__node {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(var(--angle)) translate(var(--ring-radius)) rotate(calc(-1 * var(--angle)));
+}
+
+/* 入场动效：外层 .projects__node 只负责环形定位，不能碰它的 transform，
+   所以淡入/上浮动画放在这层内壳上，跟 Skills 卡片是同一个思路。
+   气泡的点赞按钮需要是独立的 <button>，不能嵌套在 logo 按钮里面，
+   所以这层拆成 .projects__node-btn（logo + 文案，可点）和
+   .projects__bubble（气泡，装点赞按钮）两个平级元素。 */
+.projects__node-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  opacity: 0;
+  transform: translateY(46px) scale(0.7);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.projects.is-revealed .projects__node-inner {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.projects__node-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+
+/* nth-of-type 从 2 开始数：.projects__avatar 跟 .projects__node 现在都是
+   <div>，头像排在最前面，是第 1 个 div，所以六个 node 依次是 2~7。 */
+.projects__node:nth-of-type(2) .projects__node-inner { transition-delay: 0.05s; }
+.projects__node:nth-of-type(3) .projects__node-inner { transition-delay: 0.12s; }
+.projects__node:nth-of-type(4) .projects__node-inner { transition-delay: 0.19s; }
+.projects__node:nth-of-type(5) .projects__node-inner { transition-delay: 0.26s; }
+.projects__node:nth-of-type(6) .projects__node-inner { transition-delay: 0.33s; }
+.projects__node:nth-of-type(7) .projects__node-inner { transition-delay: 0.4s; }
+
+/* iOS App 图标那种统一大小的圆角方块（squircle），六个 logo 卡片全部
+   同一个尺寸/形状，排成环形看起来才像苹果那种整齐的图标网格，而不是
+   之前宽窄不一的样子。阴影分两层——一层贴身的小阴影、一层更软更远的
+   环境阴影——叠出苹果图标那种轻盈的悬浮感，而不是单层死板的黑影。 */
+.projects__node-mark {
+  width: clamp(84px, 11.5vw, 148px);
+  height: clamp(84px, 11.5vw, 148px);
+  border-radius: 24%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(10, 10, 10, 0.08), 0 16px 32px rgba(10, 10, 10, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.7), inset 0 0 0 1px rgba(10, 10, 10, 0.04);
+
+  animation: logo-float 4.4s ease-in-out infinite;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.projects__node:nth-of-type(2) .projects__node-mark { animation-delay: 0s; }
+.projects__node:nth-of-type(3) .projects__node-mark { animation-delay: 0.5s; }
+.projects__node:nth-of-type(4) .projects__node-mark { animation-delay: 1s; }
+.projects__node:nth-of-type(5) .projects__node-mark { animation-delay: 1.5s; }
+.projects__node:nth-of-type(6) .projects__node-mark { animation-delay: 2s; }
+.projects__node:nth-of-type(7) .projects__node-mark { animation-delay: 2.5s; }
+
+@keyframes logo-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -7px; }
+}
+
+.projects__node-mark img {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+}
+
+/* ChatCut / 脉脉这两个 logo 本身就是满版的纯色方块（不是留白的线稿/
+   文字标），按 78% 缩小显示会在四周露出一圈卡片底色，看起来像多了层
+   边框。这两个直接铺满整张卡片，让 logo 自己的背景色顶到卡片边缘。 */
+.projects__node-mark--fill img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.projects__node-label {
+  font-family: var(--font-label);
+  font-size: clamp(0.75rem, 1vw, 0.95rem);
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+/* 点一下 logo，气泡从卡片右上角冒出来说这段经历，做成 iMessage 收到的
+   消息气泡那种样子。真正的 iMessage 尾巴不是简单一个小圆点，是气泡轮廓
+   本身拐出来的一个带弧度的钩子——标准做法是叠两层伪元素：::before 用
+   气泡同色画一个更大的圆角方块顶出尾巴的"胖"形状，::after 用页面背景色
+   在它上面盖一刀，啃出那个钩子的弧线。顶部那条横幅说明文字就不需要了，
+   同一时间只显示一个气泡，点别的 logo 会先把上一个收起来。 */
+.projects__bubble {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  transform: translate(-14%, -66%) scale(0.5);
+  transform-origin: bottom left;
+  width: max-content;
+  max-width: 172px;
+  padding: 10px 16px;
+  border-radius: 20px;
+  background: #e5e5ea;
+  color: #1c1c1e;
+  font-family: var(--font-label);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  text-align: left;
+  white-space: normal;
+  box-shadow: 0 12px 24px rgba(10, 10, 10, 0.16);
+  pointer-events: none;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0.25s;
+  z-index: 5;
+}
+
+/* 尾巴改成一张纯色 SVG（背景图），不再用两个方块伪元素互相"啃"出弧线——
+   之前那个双伪元素叠色的做法，::after 比 ::before 宽出去的那一截没有
+   任何东西盖住，露出一块方形的页面底色，看起来像没抠干净的白块。单张
+   SVG 本身就是完整闭合的钩子形状，不存在"漏出一块"的问题。 */
+.projects__bubble::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  bottom: -1px;
+  width: 20px;
+  height: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='18' viewBox='0 0 20 18'%3E%3Cpath d='M20 0 C20 10 13 18 0 17 C9 15 12 9 12 0 Z' fill='%23e5e5ea'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+}
+
+.projects__bubble.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-14%, -84%) scale(1);
+}
+
+.projects__bubble-title {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+/* 苹果 tapback 点赞气泡：蓝色圆形叠在消息气泡右上角，里面一颗心，
+   右下方拖着两个渐小的圆点尾巴——iMessage 长按消息选"❤️"时冒出来的
+   那种反应气泡。访客可以点这个给这段经历点赞，状态存在浏览器本地，
+   下次回来还记得点过。 */
+.projects__bubble-like {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #6ea1ff, #2f66f0);
+  box-shadow: 0 6px 14px rgba(47, 102, 240, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.projects__bubble-like::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 15px;
+  height: 15px;
+  background: rgba(255, 255, 255, 0.75);
+  clip-path: path('M7.5 14C7.5 14 0 9.5 0 4.6C0 2.2 1.9 0.5 4.1 0.5C5.5 0.5 6.7 1.2 7.5 2.3C8.3 1.2 9.5 0.5 10.9 0.5C13.1 0.5 15 2.2 15 4.6C15 9.5 7.5 14 7.5 14Z');
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.projects__bubble-like::after {
+  content: '';
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #6ea1ff, #2f66f0);
+  right: -7px;
+  bottom: -7px;
+  box-shadow: 4px 4px 0 -3px #2f66f0;
+}
+
+.projects__bubble-like:hover {
+  transform: scale(1.1);
+}
+
+.projects__bubble-like.is-liked::before {
+  background: linear-gradient(160deg, #ffe1ec, #ff8fb3);
+  transform: scale(1.15);
+}
+
+.projects__bubble-like.is-popping {
+  animation: like-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes like-pop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.35) rotate(-8deg); }
+  100% { transform: scale(1); }
+}
+
+.projects__node-btn:hover .projects__node-mark,
+.projects__node-btn:focus-visible .projects__node-mark {
+  transform: scale(1.1) translateY(-6px);
+  box-shadow: 0 4px 10px rgba(10, 10, 10, 0.1), 0 22px 40px rgba(10, 10, 10, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 640px) {
+  .projects__ring {
+    --ring-radius: clamp(110px, 34vw, 160px);
+    width: 90vw;
+  }
+
+  .projects__avatar {
+    width: clamp(150px, 44vw, 220px);
+  }
+}
+
+/* ================================================
+   Skills：Spotify 卡片式 gallery
+   ================================================ */
+
+.skills {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10vh 4vw;
+  background: var(--color-bg);
+  overflow: hidden;
+}
+
+/* 拼贴式布局：卡片斜着散落在四周，大标题斜切过中间，
+   参考 "Which Major Is for You?" 封面那种倾斜网格 + 大标题的构图。 */
+.skills__collage {
+  position: relative;
+  width: min(94vw, 1120px);
+  height: clamp(560px, 82vh, 820px);
+}
+
+.skills__title-block {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+
+  opacity: 0;
+  transform: rotate(-6deg) scale(0.55);
+  transition: opacity 1s ease, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.skills.is-revealed .skills__title-block {
+  opacity: 1;
+  transform: rotate(-6deg) scale(1);
+}
+
+.skills__title-block > * {
+  pointer-events: auto;
+}
+
+.skills__title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(4.5rem, 12vw, 11rem);
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  color: var(--color-fg);
+  text-shadow:
+    3px 0 0 #fff, -3px 0 0 #fff, 0 3px 0 #fff, 0 -3px 0 #fff,
+    3px 3px 0 #fff, -3px -3px 0 #fff, 3px -3px 0 #fff, -3px 3px 0 #fff,
+    0 14px 34px rgba(10, 10, 10, 0.18);
+}
+
+.skills__caption {
+  margin-top: 10px;
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: clamp(0.8rem, 1.15vw, 1rem);
+  letter-spacing: 0.03em;
+  color: var(--color-muted);
+}
+
+/* Rive 小水母，滚动到 Skills 才懒加载，点一下会有反应 */
+.skills__mascot {
+  display: block;
+  width: clamp(70px, 9vw, 100px);
+  height: clamp(70px, 9vw, 100px);
+  margin: 0 auto 2px;
+  cursor: pointer;
+}
+
+.skills__card {
+  position: absolute;
+  display: block;
+  width: clamp(150px, 18vw, 220px);
+  aspect-ratio: 1 / 1.05;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #f2f3f5;
+  border: 1.5px dashed var(--color-muted);
+  text-decoration: none;
+  box-shadow: 0 20px 40px rgba(10, 10, 10, 0.1);
+
+  /* 入场动效放在外层卡片本身（边框/底色/阴影跟着一起飞，不然只有内容飞、
+     框先站在原地不动会很怪），translate/scale 是独立属性，跟下面固定倾斜
+     用的 transform: rotate() 不冲突，会按 translate → rotate 顺序叠加。
+     之前把动画放在 .skills__card-inner 上，又被外层这里的 overflow:hidden
+     整个裁掉，等于飞入过程根本不可见，只有落定前最后一点点露出来。 */
+  opacity: 0;
+  scale: 0.7;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease,
+    opacity 0.85s ease, translate 0.85s cubic-bezier(0.16, 1, 0.3, 1), scale 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.skills.is-revealed .skills__card {
+  opacity: 1;
+  translate: 0 0;
+  scale: 1;
+}
+
+.skills__card--1 { top: 0; left: 1%; transform: rotate(-9deg); z-index: 2; translate: -70vw -40vh; transition-delay: 0.1s; }
+.skills__card--2 { top: 3%; right: 2%; transform: rotate(7deg); z-index: 2; translate: 70vw -40vh; transition-delay: 0.18s; }
+.skills__card--3 { top: 50%; left: -2%; transform: translateY(-50%) rotate(11deg); z-index: 1; translate: -80vw 0; transition-delay: 0.26s; }
+.skills__card--4 { top: 48%; right: -3%; transform: translateY(-50%) rotate(-8deg); z-index: 1; translate: 80vw 0; transition-delay: 0.34s; }
+.skills__card--5 { bottom: 0; left: 10%; transform: rotate(6deg); z-index: 2; translate: -70vw 40vh; transition-delay: 0.42s; }
+.skills__card--6 { bottom: 1%; right: 8%; transform: rotate(-10deg); z-index: 2; translate: 70vw 40vh; transition-delay: 0.5s; }
+
+.skills__card--1:hover, .skills__card--1:focus-visible { transform: rotate(-9deg) translateY(-8px); }
+.skills__card--2:hover, .skills__card--2:focus-visible { transform: rotate(7deg) translateY(-8px); }
+.skills__card--3:hover, .skills__card--3:focus-visible { transform: translateY(calc(-50% - 8px)) rotate(11deg); }
+.skills__card--4:hover, .skills__card--4:focus-visible { transform: translateY(calc(-50% - 8px)) rotate(-8deg); }
+.skills__card--5:hover, .skills__card--5:focus-visible { transform: rotate(6deg) translateY(-8px); }
+.skills__card--6:hover, .skills__card--6:focus-visible { transform: rotate(-10deg) translateY(-8px); }
+
+.skills__card-inner {
+  position: absolute;
+  inset: 0;
+}
+
+.skills__card:hover,
+.skills__card:focus-visible {
+  box-shadow: 0 26px 48px rgba(10, 10, 10, 0.2);
+  border-style: solid;
+  border-color: var(--color-accent);
+  z-index: 4;
+}
+
+/* 占位"封面图"——真实照片放进来之后可以把这个大水印字去掉 */
+/* 之前是巨大的字母水印（M/C/D...），现在换成苹果 SF Symbols 那种细线条
+   风格的 icon（自己画的 SVG，形状上贴近 SF Symbols，不是套用苹果的字体，
+   那个是苹果平台专属授权，网页不能直接用）。 */
+.skills__card-watermark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(10, 10, 10, 0.07);
+  user-select: none;
+}
+
+.skills__card-watermark svg {
+  width: clamp(64px, 15vw, 108px);
+  height: clamp(64px, 15vw, 108px);
+}
+
+.skills__card-label {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* Spotify 式的底部信息条：封面小图标 + 标题/副标题 + 播放按钮 */
+.skills__card-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(10, 10, 10, 0.88);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.skills__card-mark {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.skills__card-mark svg {
+  width: 18px;
+  height: 18px;
+}
+
+.skills__card-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.skills__card-title {
+  color: #fff;
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skills__card-sub {
+  color: #9a9ea6;
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skills__card-play {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  transition: transform 0.2s ease;
+}
+
+.skills__card:hover .skills__card-play {
+  transform: scale(1.12);
+}
+
+/* 当前正在播放器里播的那张卡片：外圈加个蓝色高亮 + 播放键换成实心蓝底、
+   放一个跳动的小音符，一眼看出来现在放的是哪个类目。卡片本身有
+   overflow:hidden（裁内容用的），box-shadow 画在同一个元素上不受影响，
+   所以直接加在 .skills__card 上，不用加在会被裁掉的内层。 */
+.skills__card.is-playing-track {
+  box-shadow: 0 0 0 3px var(--color-accent), 0 22px 40px rgba(10, 10, 10, 0.28);
+}
+
+.skills__card.is-playing-track .skills__card-play {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.skills__card.is-playing-track .skills__card-play::before {
+  content: '♪';
+  font-size: 0.75rem;
+  animation: player-note-bob 1.2s ease-in-out infinite;
+}
+
+.skills__card.is-playing-track .skills__card-play {
+  font-size: 0;
+}
+
+/* 小屏幕放不下斜切拼贴，退化成正常堆叠：标题在上，卡片按顺序往下排 */
+@media (max-width: 760px) {
+  .skills {
+    padding: 8vh 6vw;
+  }
+
+  .skills__collage {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .skills__title-block {
+    position: static;
+    transform: none;
+  }
+
+  .skills__card {
+    position: relative;
+    width: min(70vw, 280px);
+    transform: none !important;
+  }
+
+  .skills__card:hover,
+  .skills__card:focus-visible {
+    transform: translateY(-6px) !important;
+  }
+}
+
+/* ================================================
+   悬浮播放器：右下角常驻一个小圆按钮，点一下才展开播放面板
+   （面板收起的同时会暂停），点 Skills 卡片原地切歌
+   ================================================ */
+
+.player {
+  position: fixed;
+  right: clamp(14px, 3vw, 28px);
+  bottom: clamp(14px, 3vw, 28px);
+  z-index: 200;
+
+  opacity: 0;
+  transform: scale(0.5);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.player.is-ready {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.player__fab {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--color-accent-light), var(--color-accent-deep));
+  box-shadow: 0 14px 28px rgba(0, 71, 255, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.player__fab:hover {
+  transform: scale(1.08);
+}
+
+.player__fab-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.player__fab-icon--note {
+  animation: player-note-bob 1.6s ease-in-out infinite;
+}
+
+.player__fab-icon--stop {
+  font-size: 0.85rem;
+  opacity: 0;
+  transform: scale(0.5) rotate(-45deg);
+}
+
+.player.is-open .player__fab-icon--note {
+  opacity: 0;
+  transform: scale(0.5) rotate(45deg);
+}
+
+.player.is-open .player__fab-icon--stop {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+@keyframes player-note-bob {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -3px; }
+}
+
+/* 播放面板：默认收起（透明 + 缩小 + 不可交互），点小圆按钮才展开，
+   浮在按钮正上方，跟 iOS 那种"点图标弹出小卡片"的手感一致。 */
+.player__panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 14px);
+  width: min(88vw, 320px);
+
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 18px 40px rgba(10, 10, 10, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  overflow: hidden;
+
+  opacity: 0;
+  visibility: hidden;
+  transform-origin: bottom right;
+  transform: translateY(10px) scale(0.85);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0.3s;
+}
+
+.player.is-open .player__panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.player__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px 4px;
+  font-family: var(--font-label);
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+
+.player__note {
+  color: var(--color-accent);
+  font-size: 1rem;
+  animation: player-note-bob 1.6s ease-in-out infinite;
+}
+
+.player__title {
+  font-weight: 700;
+  color: var(--color-fg);
+}
+
+/* Spotify 的 iFrame API 会把 .player__embed 这个占位 div 整个换成它自己的
+   <iframe>（不是往里面塞内容），所以样式要挂在 .player__panel 上直接选
+   iframe，选 .player__embed iframe 是选不到的。 */
+.player__panel iframe {
+  display: block;
+  width: 100%;
+  border: none;
+  line-height: 0;
+}
+
+@media (max-width: 640px) {
+  .player__panel {
+    width: min(88vw, 300px);
+    right: -6px;
+  }
+}

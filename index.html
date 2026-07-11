@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jocelyn</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Lexend:wght@300;500;700;800;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css?v=42">
+</head>
+<body>
+
+<div class="burger js-burger">
+  <div class="burger__line"></div>
+  <div class="burger__line"></div>
+  <div class="burger__line"></div>
+</div>
+
+<nav class="nav-overlay js-nav-overlay">
+  <ul class="nav-overlay__list">
+    <li><a href="#home" class="js-nav-link">Home</a></li>
+    <li><a href="#projects" class="js-nav-link">Projects</a></li>
+    <li><a href="#skills" class="js-nav-link">Skills</a></li>
+    <li>Contact</li>
+  </ul>
+  <p class="nav-overlay__note">— Contact 开发中 —</p>
+</nav>
+
+<div class="hero-stage" id="home">
+
+  <!-- 浅色层：默认可见 -->
+  <div class="s-hero">
+    <div class="s__center">
+      <h1 class="s__name">Jocelyn</h1>
+      <div class="s__persona">Builder · Magician · Explorer · Walker</div>
+    </div>
+
+    <div class="s__catcher">Underneath It all</div>
+  </div>
+
+  <!-- 深色层：只在鼠标拖尾范围内可见，同一位置露出蓝色的 Jocelyn -->
+  <div class="s-scene js-scene">
+    <div class="s__title">
+      <div class="s__title__line">Work Together</div>
+      <div class="s__title__line">Explore All</div>
+    </div>
+
+    <div class="s__center">
+      <h1 class="s__name s__name--echo">Jocelyn</h1>
+      <!-- 跟浅色层的 persona 占同样的高度，保证两层的名字垂直对齐 -->
+      <div class="s__persona s__persona--spacer" aria-hidden="true">Builder · Magician · Explorer · Walker</div>
+    </div>
+
+    <div class="s__bottom">
+      <div class="s__dreamer">Dreamer</div>
+      <div class="s__word">AI GTM LIFE</div>
+    </div>
+  </div>
+
+  <div class="cursor js-cursor"></div>
+
+  <div class="hero-stage__scroll-hint">Scroll</div>
+
+</div><!-- .hero-stage -->
+
+<section class="projects js-reveal" id="projects">
+
+  <div class="projects__ring">
+    <div class="projects__avatar js-projects-avatar">
+      <div class="projects__avatar-frame">
+        <video class="projects__avatar-img js-avatar-img is-active" src="assets/avatar/video/vid-1.mp4" autoplay muted playsinline></video>
+        <video class="projects__avatar-img js-avatar-img" muted playsinline></video>
+      </div>
+      <div class="projects__avatar-badge js-avatar-badge" aria-hidden="true">😎</div>
+      <div class="projects__float-layer js-float-layer" aria-hidden="true"></div>
+    </div>
+
+    <div class="projects__node" style="--angle: 10deg">
+      <span class="projects__node-inner">
+        <button class="projects__node-btn js-project-node"
+          data-title="Bonjour!" data-role="生态合作负责人 · 商务负责人"
+          data-desc="Builder 社区的连接者，一年参加几百场活动。">
+          <span class="projects__node-mark"><img src="assets/logos/bonjour.svg" alt="Bonjour!"></span>
+          <span class="projects__node-label">Bonjour!</span>
+        </button>
+        <span class="projects__bubble js-project-bubble" aria-hidden="true">
+          <span class="projects__bubble-text js-bubble-text"></span>
+          <button class="projects__bubble-like js-bubble-like" type="button" aria-label="给这段经历点赞" aria-pressed="false"></button>
+        </span>
+      </span>
+    </div>
+
+    <div class="projects__node" style="--angle: 42deg">
+      <span class="projects__node-inner">
+        <button class="projects__node-btn js-project-node"
+          data-title="奇绩创坛" data-role="行研 → 创新产品组"
+          data-desc="从 Researcher 到 AI 前沿，落地 20+ 线下活动，运营 500+ 人社群。">
+          <span class="projects__node-mark"><img src="assets/logos/miracleplus.png" alt="奇绩创坛"></span>
+          <span class="projects__node-label">奇绩创坛</span>
+        </button>
+        <span class="projects__bubble js-project-bubble" aria-hidden="true">
+          <span class="projects__bubble-text js-bubble-text"></span>
+          <button class="projects__bubble-like js-bubble-like" type="button" aria-label="给这段经历点赞" aria-pressed="false"></button>
+        </span>
+      </span>
+    </div>
+
+    <div class="projects__node" style="--angle: 74deg">
+      <span class="projects__node-inner">
+        <button class="projects__node-btn js-project-node"
+          data-title="脉脉" data-role="招聘市场"
+          data-desc="从招聘到商业，不一样的 landing 视角。">
+          <span class="projects__node-mark projects__node-mark--fill"><img src="assets/logos/maimai.png" alt="脉脉"></span>
+          <span class="projects__node-label">脉脉</span>
+        </button>
+        <span class="projects__bubble js-project-bubble" aria-hidden="true">
+          <span class="projects__bubble-text js-bubble-text"></span>
+          <button class="projects__bubble-like js-bubble-like" type="button" aria-label="给这段经历点赞" aria-pressed="false"></button>
+        </span>
+      </span>
+    </div>
+
+    <div class="projects__node" style="--angle: 106deg">
+      <span class="projects__node-inner">
+        <button class="projects__node-btn js-project-node"
+          data-title="元气森林" data-role="创新产品赛道"
+          data-desc="京津冀创新产品赛道一等奖。">
+          <span class="projects__node-mark"><img src="assets/logos/genki-forest.png?v=2" alt="元气森林"></span>
+          <span class="projects__node-label">元气森林</span>
+        </button>
+        <span class="projects__bubble js-project-bubble" aria-hidden="true">
+          <span class="projects__bubble-text js-bubble-text"></span>
+          <button class="projects__bubble-like js-bubble-like" type="button" aria-label="给这段经历点赞" aria-pressed="false"></button>
+        </span>
+      </span>
+    </div>
+
+    <div class="projects__node" style="--angle: 138deg">
+      <span class="projects__node-inner">
+        <button class="projects__node-btn js-project-node"
+          data-title="APYCF" data-role="Co-Founder · 商务负责人"
+          data-desc="从 0 到 1 搭起商务这条线。">
+          <span class="projects__node-mark"><img src="assets/logos/apycf.png?v=3" alt="APYCF"></span>
+          <span class="projects__node-label">APYCF</span>
+        </button>
+        <span class="projects__bubble js-project-bubble" aria-hidden="true">
+          <span class="projects__bubble-text js-bubble-text"></span>
+          <button class="projects__bubble-like js-bubble-like" type="button" aria-label="给这段经历点赞" aria-pressed="false"></button>
+        </span>
+      </span>
+    </div>
+
+    <div class="projects__node" style="--angle: 170deg">
+      <span class="projects__node-inner">
+        <button class="projects__node-btn js-project-node"
+          data-title="ChatCut" data-role="海外内容运营实习生"
+          data-desc="第一次把内容和海外市场连起来。">
+          <span class="projects__node-mark projects__node-mark--fill"><img src="assets/logos/chatcut.png" alt="ChatCut"></span>
+          <span class="projects__node-label">ChatCut</span>
+        </button>
+        <span class="projects__bubble js-project-bubble" aria-hidden="true">
+          <span class="projects__bubble-text js-bubble-text"></span>
+          <button class="projects__bubble-like js-bubble-like" type="button" aria-label="给这段经历点赞" aria-pressed="false"></button>
+        </span>
+      </span>
+    </div>
+  </div>
+</section>
+
+<section class="skills js-reveal" id="skills">
+  <div class="skills__collage">
+
+    <a class="skills__card skills__card--1 js-skill-track" href="#" data-spotify-uri="spotify:track:0HPKt1krGch04gEJgzIVw6" data-track-title="Music">
+      <span class="skills__card-inner">
+        <span class="skills__card-watermark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 17V4.8L18 3v12.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="17" r="2.5" stroke="currentColor" stroke-width="1.6"/><circle cx="15.5" cy="15.2" r="2.5" stroke="currentColor" stroke-width="1.6"/></svg></span>
+        <span class="skills__card-label">Music</span>
+        <span class="skills__card-bar">
+          <span class="skills__card-mark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 17V4.8L18 3v12.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="17" r="2.5" stroke="currentColor" stroke-width="1.8"/><circle cx="15.5" cy="15.2" r="2.5" stroke="currentColor" stroke-width="1.8"/></svg></span>
+          <span class="skills__card-info">
+            <span class="skills__card-title">Music</span>
+            <span class="skills__card-sub">查看更多</span>
+          </span>
+          <span class="skills__card-play">▶</span>
+        </span>
+      </span>
+    </a>
+
+    <a class="skills__card skills__card--2 js-skill-track" href="#" data-spotify-uri="spotify:track:0eAuGrXyGFYwur9ARUe7LJ" data-track-title="Coding">
+      <span class="skills__card-inner">
+        <span class="skills__card-watermark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.5 8L4.5 12L8.5 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 8L19.5 12L15.5 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.5 5L10.5 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <span class="skills__card-label">Coding</span>
+        <span class="skills__card-bar">
+          <span class="skills__card-mark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.5 8L4.5 12L8.5 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 8L19.5 12L15.5 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.5 5L10.5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <span class="skills__card-info">
+            <span class="skills__card-title">Coding</span>
+            <span class="skills__card-sub">查看更多</span>
+          </span>
+          <span class="skills__card-play">▶</span>
+        </span>
+      </span>
+    </a>
+
+    <a class="skills__card skills__card--3 js-skill-track" href="#" data-spotify-uri="spotify:track:4KBx9DSSbFaumwlEqjX4CP" data-track-title="Dancing">
+      <span class="skills__card-inner">
+        <span class="skills__card-watermark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="13" cy="4.5" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M13 6.5L10 12M10 12L6 9M10 12L8 19M13 6.5L16 11M16 11L20 8M16 11L17 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="skills__card-label">Dancing</span>
+        <span class="skills__card-bar">
+          <span class="skills__card-mark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="13" cy="4.5" r="2" stroke="currentColor" stroke-width="1.8"/><path d="M13 6.5L10 12M10 12L6 9M10 12L8 19M13 6.5L16 11M16 11L20 8M16 11L17 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="skills__card-info">
+            <span class="skills__card-title">Dancing</span>
+            <span class="skills__card-sub">查看更多</span>
+          </span>
+          <span class="skills__card-play">▶</span>
+        </span>
+      </span>
+    </a>
+
+    <a class="skills__card skills__card--4 js-skill-track" href="#" data-spotify-uri="spotify:track:2WdAV1VqmllcEznKlVOFxG" data-track-title="Reading">
+      <span class="skills__card-inner">
+        <span class="skills__card-watermark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 6C10.5 4.8 8.2 4.2 5 4.5V17.5C8.2 17.2 10.5 17.8 12 19C13.5 17.8 15.8 17.2 19 17.5V4.5C15.8 4.2 13.5 4.8 12 6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 6V19" stroke="currentColor" stroke-width="1.6"/></svg></span>
+        <span class="skills__card-label">Reading</span>
+        <span class="skills__card-bar">
+          <span class="skills__card-mark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 6C10.5 4.8 8.2 4.2 5 4.5V17.5C8.2 17.2 10.5 17.8 12 19C13.5 17.8 15.8 17.2 19 17.5V4.5C15.8 4.2 13.5 4.8 12 6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 6V19" stroke="currentColor" stroke-width="1.8"/></svg></span>
+          <span class="skills__card-info">
+            <span class="skills__card-title">Reading</span>
+            <span class="skills__card-sub">查看更多</span>
+          </span>
+          <span class="skills__card-play">▶</span>
+        </span>
+      </span>
+    </a>
+
+    <a class="skills__card skills__card--5" href="#">
+      <span class="skills__card-inner">
+        <span class="skills__card-watermark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 3.5H14L18 7.5V20.5H6.5V3.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 3.5V7.5H18" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12H15.5M9 15.5H15.5M9 19H13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+        <span class="skills__card-label">Article</span>
+        <span class="skills__card-bar">
+          <span class="skills__card-mark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 3.5H14L18 7.5V20.5H6.5V3.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3.5V7.5H18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12H15.5M9 15.5H15.5M9 19H13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+          <span class="skills__card-info">
+            <span class="skills__card-title">Article</span>
+            <span class="skills__card-sub">查看更多</span>
+          </span>
+          <span class="skills__card-play">▶</span>
+        </span>
+      </span>
+    </a>
+
+    <a class="skills__card skills__card--6 js-skill-track" href="#" data-spotify-uri="spotify:track:7x9aauaA9cu6tyfpHnqDLo" data-track-title="Design">
+      <span class="skills__card-inner">
+        <span class="skills__card-watermark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.5 3.5C19.5 4.5 19.5 6 18.5 7L11 14.5L8.5 12L16 4.5C17 3.5 17.5 2.5 18.5 3.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 12C6.5 11 4 12.5 4 15.5C4 17.5 5.5 19 4 20.5C6 20.8 9 20 9.5 17.5C10 15.5 10.5 13 8.5 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+        <span class="skills__card-label">Design</span>
+        <span class="skills__card-bar">
+          <span class="skills__card-mark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.5 3.5C19.5 4.5 19.5 6 18.5 7L11 14.5L8.5 12L16 4.5C17 3.5 17.5 2.5 18.5 3.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.5 12C6.5 11 4 12.5 4 15.5C4 17.5 5.5 19 4 20.5C6 20.8 9 20 9.5 17.5C10 15.5 10.5 13 8.5 12Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+          <span class="skills__card-info">
+            <span class="skills__card-title">Design</span>
+            <span class="skills__card-sub">查看更多</span>
+          </span>
+          <span class="skills__card-play">▶</span>
+        </span>
+      </span>
+    </a>
+
+    <div class="skills__title-block">
+      <canvas class="skills__mascot js-mascot-canvas" width="160" height="160" aria-hidden="true"></canvas>
+      <div class="skills__title">Skill</div>
+      <div class="skills__caption">Music · Coding · Dancing · Reading · Article · Design</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 悬浮播放器：默认只在右下角显示一个小圆按钮，点一下才展开播放面板
+     （再点一下收起并停止）。点 Skills 卡片会在这里原地切歌，不再跳去
+     Spotify 新标签页。用的是 Spotify 官方 iFrame Embed API（不是下载歌曲
+     文件自建播放器——那样等于自己扒版权音乐重新分发，不合规）。 -->
+<div class="player js-player">
+  <div class="player__panel js-player-panel">
+    <div class="player__label">
+      <span class="player__note">♪</span>
+      <span class="player__title js-player-title">Music</span>
+    </div>
+    <div class="player__embed js-player-embed"></div>
+  </div>
+  <button class="player__fab js-player-fab" type="button" aria-label="播放/停止音乐" aria-expanded="false">
+    <span class="player__fab-icon player__fab-icon--note">♪</span>
+    <span class="player__fab-icon player__fab-icon--stop">✕</span>
+  </button>
+</div>
+
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+<script src="js/main.js?v=24"></script>
+</body>
+</html>

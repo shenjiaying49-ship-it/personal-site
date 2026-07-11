@@ -1,0 +1,25 @@
+.DS_Store
+
+# raw material / working notes — not needed for the deployed site
+*.pdf
+Avatar.jpg
+IMG_7926.jpg
+不同表情照片.PNG
+content.md
+shared-repo-management-guide.md
+reference/
+歌单/
+第二页材料/
+第二页视频/
+第三页材料/
+
+# leftover assets from earlier abandoned approaches (sticker avatar, Rive
+# character mask, photo eye-tracking) — no longer referenced by the site
+assets/avatar/expr/
+assets/avatar/eye-left.png
+assets/avatar/eye-right.png
+assets/avatar/jocelyn-avatar.jpg
+assets/avatar/jocelyn-blank-eyes.png
+assets/avatar/jocelyn-cutout.png
+assets/rive/character-mask.png
+assets/rive/hero-ui-animation.riv
