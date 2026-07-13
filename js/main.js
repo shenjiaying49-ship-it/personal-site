@@ -144,43 +144,7 @@ function scheduleFloatingIcon() {
 
 scheduleFloatingIcon();
 
-// ---------- 点 logo：随机换表情 + 在这个 logo 右上角冒一个小气泡
-// （气泡是 .projects__bubble，跟 logo 按钮是平级关系，不是嵌在里面——
-// 因为气泡上还挂了一个独立的点赞 <button>，两个 button 不能互相嵌套） ----------
-
-let activeBubble = null;
-let bubbleHideTimer = null;
-
-function showProjectBubble(node) {
-  const bubble = node.closest('.projects__node-inner').querySelector('.js-project-bubble');
-  if (!bubble) return;
-
-  if (activeBubble && activeBubble !== bubble) {
-    activeBubble.classList.remove('is-visible');
-  }
-  clearTimeout(bubbleHideTimer);
-
-  const textEl = bubble.querySelector('.js-bubble-text');
-  textEl.innerHTML = `<span class="projects__bubble-title">${node.dataset.title}</span>${node.dataset.role} — ${node.dataset.desc}`;
-  bubble.classList.add('is-visible');
-  activeBubble = bubble;
-
-  bubbleHideTimer = setTimeout(() => {
-    bubble.classList.remove('is-visible');
-    activeBubble = null;
-  }, 4000);
-}
-
-document.querySelectorAll('.js-project-node').forEach((node) => {
-  node.addEventListener('click', () => {
-    showProjectBubble(node);
-    playNextClip();
-  });
-});
-
-// ---------- 点赞：苹果 tapback 那种蓝色心形反应气泡，点一下切换点赞
-// 状态。没有后端，状态存浏览器本地（localStorage），按 logo 名字区分，
-// 所以是"这个访客有没有点过"，不是全站汇总的点赞数。 ----------
+// ---------- 点 logo：侧边抽屉展示经历详情 ----------
 
 const LIKED_KEY = 'jocelyn-site-liked-projects';
 
@@ -198,31 +162,88 @@ function saveLikedSet(set) {
 
 const likedProjects = getLikedSet();
 
-document.querySelectorAll('.js-bubble-like').forEach((likeBtn) => {
-  const node = likeBtn.closest('.projects__node-inner').querySelector('.js-project-node');
-  const title = node.dataset.title;
+const drawerEl = document.querySelector('.js-project-drawer');
+const drawerBackdropEl = document.querySelector('.js-drawer-backdrop');
+const drawerCloseEl = document.querySelector('.js-drawer-close');
+const drawerTitleEl = document.querySelector('.js-drawer-title');
+const drawerRoleEl = document.querySelector('.js-drawer-role');
+const drawerDescEl = document.querySelector('.js-drawer-desc');
+const drawerImgWrapEl = document.querySelector('.js-drawer-img-wrap');
+const drawerImgEl = document.querySelector('.js-drawer-img');
+const drawerLikeEl = document.querySelector('.js-drawer-like');
 
-  if (likedProjects.has(title)) {
-    likeBtn.classList.add('is-liked');
-    likeBtn.setAttribute('aria-pressed', 'true');
+let drawerCurrentTitle = null;
+
+function openProjectDrawer(node) {
+  const { title, role, desc, img = '' } = node.dataset;
+
+  drawerTitleEl.textContent = title;
+  drawerRoleEl.textContent = role;
+  drawerDescEl.textContent = desc;
+
+  if (img) {
+    drawerImgEl.src = img;
+    drawerImgEl.alt = title;
+    drawerImgWrapEl.classList.add('has-img');
+  } else {
+    drawerImgWrapEl.classList.remove('has-img');
+    drawerImgEl.src = '';
   }
 
-  likeBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const isLiked = likeBtn.classList.toggle('is-liked');
-    likeBtn.setAttribute('aria-pressed', String(isLiked));
+  drawerCurrentTitle = title;
+  const isLiked = likedProjects.has(title);
+  drawerLikeEl.classList.toggle('is-liked', isLiked);
+  drawerLikeEl.setAttribute('aria-pressed', String(isLiked));
 
-    if (isLiked) {
-      likedProjects.add(title);
-    } else {
-      likedProjects.delete(title);
-    }
-    saveLikedSet(likedProjects);
+  // 判断 logo 在屏幕左边还是右边，卡片跟着出现在对应侧
+  const rect = node.getBoundingClientRect();
+  const nodeCenter = rect.left + rect.width / 2;
+  const side = nodeCenter > window.innerWidth / 2 ? 'right' : 'left';
+  drawerEl.classList.remove('project-drawer--right', 'project-drawer--left');
+  drawerEl.classList.add(`project-drawer--${side}`);
 
-    likeBtn.classList.remove('is-popping');
-    void likeBtn.offsetWidth;
-    likeBtn.classList.add('is-popping');
+  drawerEl.removeAttribute('hidden');
+  requestAnimationFrame(() => drawerEl.classList.add('is-open'));
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProjectDrawer() {
+  drawerEl.classList.remove('is-open');
+  document.body.style.overflow = '';
+  drawerEl.addEventListener('transitionend', () => {
+    if (!drawerEl.classList.contains('is-open')) drawerEl.setAttribute('hidden', '');
+  }, { once: true });
+}
+
+document.querySelectorAll('.js-project-node').forEach((node) => {
+  node.addEventListener('click', () => {
+    openProjectDrawer(node);
+    playNextClip();
   });
+});
+
+drawerBackdropEl.addEventListener('click', closeProjectDrawer);
+drawerCloseEl.addEventListener('click', closeProjectDrawer);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && drawerEl.classList.contains('is-open')) closeProjectDrawer();
+});
+
+drawerLikeEl.addEventListener('click', () => {
+  if (!drawerCurrentTitle) return;
+  const isLiked = drawerLikeEl.classList.toggle('is-liked');
+  drawerLikeEl.setAttribute('aria-pressed', String(isLiked));
+
+  if (isLiked) {
+    likedProjects.add(drawerCurrentTitle);
+  } else {
+    likedProjects.delete(drawerCurrentTitle);
+  }
+  saveLikedSet(likedProjects);
+
+  drawerLikeEl.classList.remove('is-popping');
+  void drawerLikeEl.offsetWidth;
+  drawerLikeEl.classList.add('is-popping');
 });
 
 // ---------- cursor + 单圆遮罩（不做拖尾，只跟随当前位置） ----------
@@ -239,6 +260,23 @@ const target = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 const current = { ...target };
 let stageActive = false;
 
+// 触屏设备没有鼠标，深色层永远出不来，等于最有态度的那几句文案在手机上
+// 不存在。降级方案：只要 Hero 还在屏幕里，光斑就自己沿一条平滑曲线慢慢
+// 游走，把隐藏层自动扫出来。
+const isTouchDevice = window.matchMedia('(hover: none)').matches;
+
+if (isTouchDevice) {
+  const heroVisibleObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        stageActive = entry.isIntersecting;
+      });
+    },
+    { threshold: 0.25 }
+  );
+  heroVisibleObserver.observe(heroStage);
+}
+
 function moveCursorDot(x, y) {
   cursorEl.style.setProperty('--x', `${x}px`);
   cursorEl.style.setProperty('--y', `${y}px`);
@@ -254,13 +292,23 @@ function renderMask() {
     sceneEl.style.maskImage = HIDDEN_MASK;
     return;
   }
-  // 硬边圆，不做柔边渐变过渡
-  const maskStr = `radial-gradient(circle ${SPOTLIGHT_RADIUS}px at ${current.x.toFixed(0)}px ${current.y.toFixed(0)}px, white 0%, white 99%, transparent 100%)`;
+  // 硬边圆，不做柔边渐变过渡。小屏幕上 260px 的光斑几乎盖满整屏，
+  // 就没有"探照灯"的感觉了，按屏宽收一下。
+  const radius = Math.min(SPOTLIGHT_RADIUS, heroStage.offsetWidth * 0.42);
+  const maskStr = `radial-gradient(circle ${radius}px at ${current.x.toFixed(0)}px ${current.y.toFixed(0)}px, white 0%, white 99%, transparent 100%)`;
   sceneEl.style.webkitMaskImage = maskStr;
   sceneEl.style.maskImage = maskStr;
 }
 
 function tick() {
+  // 触屏上没有 mousemove 喂 target，用时间驱动一条 Lissajous 曲线，
+  // 光斑自己在版面里慢慢转
+  if (isTouchDevice && stageActive) {
+    const t = performance.now();
+    target.x = heroStage.offsetWidth * (0.5 + 0.32 * Math.cos(t * 0.00042));
+    target.y = heroStage.offsetHeight * (0.44 + 0.28 * Math.sin(t * 0.00061));
+  }
+
   current.x += (target.x - current.x) * EASE;
   current.y += (target.y - current.y) * EASE;
   moveCursorDot(current.x, current.y);
@@ -351,59 +399,32 @@ skillTracks.forEach((el) => {
   });
 });
 
-// ---------- Skills 板块的 Rive 小水母：滚到才加载，点一下有反应 ----------
+// ---------- Contact：复制微信号/邮箱。联系方式不写在 HTML 里，在这儿
+// 用片段拼出来——爬虫批量扒静态源码时抓不到完整明文，真人点一下就复制 ----------
 
-const RIVE_RUNTIME_SRC = 'https://unpkg.com/@rive-app/canvas@2.38.5/rive.js';
-const mascotCanvas = document.querySelector('.js-mascot-canvas');
-let mascotLoaded = false;
+const CONTACT_PARTS = {
+  wechat: ['sjjjj', 'yyyy', 'jszdd'],
+  email: ['SJY', '2004626', '@', 'outlook.com'],
+};
 
-function loadRiveRuntime() {
-  return new Promise((resolve, reject) => {
-    if (window.rive) return resolve();
-    const script = document.createElement('script');
-    script.src = RIVE_RUNTIME_SRC;
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
+document.querySelectorAll('.js-copy-contact').forEach((btn) => {
+  btn.addEventListener('click', async () => {
+    const value = CONTACT_PARTS[btn.dataset.kind].join('');
+    try {
+      await navigator.clipboard.writeText(value);
+    } catch {
+      // 旧浏览器/非 https 环境没有 clipboard API，退回老办法
+      const ta = document.createElement('textarea');
+      ta.value = value;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
+    btn.classList.add('is-copied');
+    setTimeout(() => btn.classList.remove('is-copied'), 1600);
   });
-}
-
-function initMascot() {
-  if (mascotLoaded) return;
-  mascotLoaded = true;
-
-  loadRiveRuntime().then(() => {
-    const r = new window.rive.Rive({
-      src: 'assets/rive/jellyfish.riv',
-      canvas: mascotCanvas,
-      artboard: 'Jellyfish',
-      stateMachines: 'State Machine 1',
-      autoplay: true,
-      onLoad: () => {
-        r.resizeDrawingSurfaceToCanvas();
-        mascotCanvas.addEventListener('click', () => {
-          const inputs = r.stateMachineInputs('State Machine 1');
-          const clickedInput = inputs.find((i) => i.name === 'jellyfishBubbleClicked');
-          if (clickedInput) clickedInput.fire();
-        });
-      },
-    });
-  });
-}
-
-const mascotObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        initMascot();
-        mascotObserver.disconnect();
-      }
-    });
-  },
-  { rootMargin: '200px' }
-);
-
-mascotObserver.observe(document.querySelector('#skills'));
+});
 
 // ---------- 滚动进场动效：Projects / Skills 第一次露出时触发一次 ----------
 
@@ -424,6 +445,6 @@ const revealObserver = new IntersectionObserver(
 // 时，section 顶部（标题文字）一露头动画就触发完了，等用户滚到真正
 // 居中的内容时早就播完，等于完全看不到。
 document.querySelectorAll('.js-reveal').forEach((el) => {
-  const target = el.querySelector('.projects__ring, .skills__collage') || el;
+  const target = el.querySelector('.projects__ring, .skills__collage, .contact__inner') || el;
   revealObserver.observe(target);
 });
