@@ -41,8 +41,15 @@ let currentClipSrc = avatarVideoEls[0].getAttribute('src');
 let activeVideoIndex = 0;
 let isSwitchingClip = false;
 
-function pickNextClip() {
-  const pool = VIDEO_CLIPS.filter((c) => c.src !== currentClipSrc);
+// 提前把"下一段"缓存到闲置的那个 <video> 里，而不是等到真要切的那一刻
+// 才发起下载——一段视频播 4~5 秒，足够把下一段（压缩后只有 200~500KB）
+// 在后台下完，等真正要切的时候直接就绪，不用现等网络。preloadedClip 记
+// 录预下载的是哪一段，配合下面 pickNextClip 的排除逻辑，保证不会跟当前
+// 正在播的重复。
+let preloadedClip = null;
+
+function pickNextClip(excludeSrc) {
+  const pool = VIDEO_CLIPS.filter((c) => c.src !== excludeSrc);
   const totalWeight = pool.reduce((sum, c) => sum + c.weight, 0);
   let r = Math.random() * totalWeight;
   for (const clip of pool) {
@@ -52,18 +59,35 @@ function pickNextClip() {
   return pool[pool.length - 1];
 }
 
+// 往当前闲置（非台前）的 <video> 里预下载一段，跟正在播的那段不重复。
+function prefetchNextClip() {
+  const idleEl = avatarVideoEls[1 - activeVideoIndex];
+  const clip = pickNextClip(currentClipSrc);
+  preloadedClip = clip;
+  idleEl.src = clip.src;
+  idleEl.load();
+}
+
 function playNextClip() {
   if (isSwitchingClip) return;
   isSwitchingClip = true;
 
-  const next = pickNextClip();
-  currentClipSrc = next.src;
-
   const outgoingEl = avatarVideoEls[activeVideoIndex];
   const incomingEl = avatarVideoEls[1 - activeVideoIndex];
 
-  incomingEl.src = next.src;
-  incomingEl.load();
+  // 闲置的 <video> 里如果已经预下载了下一段（src 跟 preloadedClip 对得上），
+  // 直接用它，不再重新挑一个、重新发请求——不然预下载就白做了。只有极端
+  // 情况（比如第一次点击发生在初始预下载排好队之前）才现挑现下。
+  const next = preloadedClip && incomingEl.getAttribute('src') === preloadedClip.src
+    ? preloadedClip
+    : pickNextClip(currentClipSrc);
+
+  if (next !== preloadedClip) {
+    incomingEl.src = next.src;
+    incomingEl.load();
+  }
+  currentClipSrc = next.src;
+  preloadedClip = null;
 
   const startCrossfade = () => {
     incomingEl.currentTime = 0;
@@ -75,9 +99,10 @@ function playNextClip() {
     isSwitchingClip = false;
 
     // 交叉淡化的过渡时长跟 CSS 的 opacity transition 对齐，动画放完了再
-    // 暂停旧视频，省着点性能。
+    // 暂停旧视频，省着点性能。暂停完就闲下来了，立刻拿它去预下载下一段。
     setTimeout(() => {
       outgoingEl.pause();
+      prefetchNextClip();
     }, 650);
   };
 
@@ -92,6 +117,9 @@ function playNextClip() {
   void avatarBadgeEl.offsetWidth;
   avatarBadgeEl.classList.add('is-popping');
 }
+
+// 页面一开始 vid-1 就在台前自动播了，趁这 4 秒把第二段先下起来
+prefetchNextClip();
 
 // 一段视频自然播完，自动接下一段（轮回随机播放）——只有当前台前显示的
 // 那个 <video> 触发 ended 才算数，后台那个不会自然播到结尾。
