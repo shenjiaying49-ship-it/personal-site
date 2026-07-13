@@ -315,20 +315,6 @@
      （再点一下收起并停止）。点 Skills 卡片会在这里原地切歌，不再跳去
      Spotify 新标签页。用的是 Spotify 官方 iFrame Embed API（不是下载歌曲
      文件自建播放器——那样等于自己扒版权音乐重新分发，不合规）。 -->
-<div class="player js-player">
-  <div class="player__panel js-player-panel">
-    <div class="player__label">
-      <span class="player__note">♪</span>
-      <span class="player__title js-player-title">Music</span>
-    </div>
-    <div class="player__embed js-player-embed"></div>
-  </div>
-  <button class="player__fab js-player-fab" type="button" aria-label="播放/停止音乐" aria-expanded="false">
-    <span class="player__fab-icon player__fab-icon--note">♪</span>
-    <span class="player__fab-icon player__fab-icon--stop">✕</span>
-  </button>
-</div>
-
 <!-- 侧边抽屉：点 logo 从右侧滑入，展示经历详情 + 图片 -->
 <div class="project-drawer js-project-drawer" role="dialog" aria-modal="true" aria-label="经历详情" hidden>
   <div class="project-drawer__backdrop js-drawer-backdrop"></div>
@@ -351,7 +337,6 @@
   </div>
 </div>
 
-<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
-<script src="js/main.js?v=29"></script>
+<script src="js/main.js?v=30"></script>
 </body>
 </html>

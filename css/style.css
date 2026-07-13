@@ -792,11 +792,11 @@ html, body {
    文字被截断。直接放弃环形：头像在上占一整行，logo 退化成 3 列网格。 */
 @media (max-width: 640px) {
   .projects__ring {
-    width: 90vw;
+    width: 94vw;
     height: auto;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 26px 8px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px 6px;
     justify-items: center;
   }
 
@@ -804,7 +804,7 @@ html, body {
     position: relative;
     inset: auto;
     grid-column: 1 / -1;
-    width: clamp(180px, 58vw, 260px);
+    width: clamp(160px, 52vw, 240px);
     margin: 0 0 6px;
   }
 
@@ -814,14 +814,9 @@ html, body {
     transform: none !important;
   }
 
-  /* 7 个节点排 3+3+1，最后一个居中，别孤零零挂在左下角 */
-  .projects__node:last-of-type {
-    grid-column: 2;
-  }
-
   .projects__node-mark {
-    width: clamp(64px, 19vw, 84px);
-    height: clamp(64px, 19vw, 84px);
+    width: clamp(56px, 16vw, 72px);
+    height: clamp(56px, 16vw, 72px);
   }
 
   /* 网格排得开，标签恢复常驻显示，不做悬浮药丸 */
@@ -833,6 +828,7 @@ html, body {
     background: none;
     box-shadow: none;
     pointer-events: auto;
+    font-size: 0.65rem;
     color: var(--color-muted);
   }
 }
