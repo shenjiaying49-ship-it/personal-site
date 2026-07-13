@@ -541,6 +541,7 @@ html, body {
 .projects__node:nth-of-type(6) { left: 72%;   bottom: 0; z-index: 2; transform: rotate(-5deg); }
 .projects__node:nth-of-type(7) { left: 85%;   bottom: 0; z-index: 3; transform: rotate(9deg); }
 .projects__node:nth-of-type(8) { left: 79.5%; bottom: clamp(72px, 10.2vw, 132px); z-index: 4; transform: rotate(12deg); }
+.projects__node:nth-of-type(9) { left: 55%;   bottom: 0; z-index: 2; transform: rotate(-4deg); }
 
 /* 入场动效：外层 .projects__node 只负责环形定位，不能碰它的 transform，
    所以淡入/上浮动画放在这层内壳上，跟 Skills 卡片是同一个思路。
@@ -589,6 +590,7 @@ html, body {
 .projects__node:nth-of-type(6) .projects__node-inner { transition-delay: 0.29s; }
 .projects__node:nth-of-type(7) .projects__node-inner { transition-delay: 0.35s; }
 .projects__node:nth-of-type(8) .projects__node-inner { transition-delay: 0.41s; }
+.projects__node:nth-of-type(9) .projects__node-inner { transition-delay: 0.47s; }
 
 /* iOS App 图标那种统一大小的圆角方块（squircle），六个 logo 卡片全部
    同一个尺寸/形状，排成环形看起来才像苹果那种整齐的图标网格，而不是
@@ -1480,8 +1482,8 @@ html, body {
    空白，比例很难看。 */
 .project-drawer__panel {
   position: relative;
-  width: min(260px, 100%);
-  max-height: min(72vh, 580px);
+  width: min(300px, 100%);
+  max-height: min(76vh, 640px);
   background: #fff;
   border-radius: 24px;
   box-shadow:
@@ -1534,7 +1536,7 @@ html, body {
 /* 图片区域：默认隐藏，有图片时加 .has-img 才显示 */
 .project-drawer__img-wrap {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: #f2f3f5;
   display: none;
