@@ -361,6 +361,93 @@ heroStage.addEventListener('mouseleave', () => {
 });
 
 
+// ---------- 悬浮播放器：右下角小圆按钮，点才展开。Spotify 脚本懒加载——
+// 不在页面打开时就请求 open.spotify.com（会在中国超时），等用户第一次点
+// 播放按钮或 skill 卡片时才动态插入 script 标签。 ----------
+
+const playerEl = document.querySelector('.js-player');
+const playerFabEl = document.querySelector('.js-player-fab');
+const playerEmbedEl = document.querySelector('.js-player-embed');
+const playerTitleEl = document.querySelector('.js-player-title');
+const skillTracks = document.querySelectorAll('.js-skill-track');
+
+const DEFAULT_TRACK = {
+  uri: 'spotify:track:0HPKt1krGch04gEJgzIVw6',
+  title: 'Music',
+};
+
+let spotifyController = null;
+let spotifyScriptLoaded = false;
+
+function loadSpotifyScript() {
+  if (spotifyScriptLoaded) return;
+  spotifyScriptLoaded = true;
+  const s = document.createElement('script');
+  s.src = 'https://open.spotify.com/embed/iframe-api/v1';
+  s.async = true;
+  document.body.appendChild(s);
+}
+
+window.onSpotifyIframeApiReady = (IFrameAPI) => {
+  IFrameAPI.createController(
+    playerEmbedEl,
+    { uri: DEFAULT_TRACK.uri, width: '100%', height: '80' },
+    (controller) => {
+      spotifyController = controller;
+      playerEl.classList.add('is-ready');
+    }
+  );
+};
+
+function openPlayer() {
+  playerEl.classList.add('is-open');
+  playerFabEl.setAttribute('aria-expanded', 'true');
+  if (spotifyController) spotifyController.play();
+}
+
+function closePlayer() {
+  playerEl.classList.remove('is-open');
+  playerFabEl.setAttribute('aria-expanded', 'false');
+  if (spotifyController) spotifyController.pause();
+}
+
+playerFabEl.addEventListener('click', () => {
+  loadSpotifyScript();
+  if (playerEl.classList.contains('is-open')) {
+    closePlayer();
+  } else {
+    openPlayer();
+  }
+});
+
+function playSkillTrack(el) {
+  loadSpotifyScript();
+  const uri = el.dataset.spotifyUri;
+  if (!uri) return;
+
+  skillTracks.forEach((t) => t.classList.remove('is-playing-track'));
+  el.classList.add('is-playing-track');
+  playerTitleEl.textContent = el.dataset.trackTitle;
+
+  if (spotifyController) {
+    spotifyController.loadUri(uri);
+    openPlayer();
+  } else {
+    // 脚本还没加载完，等 controller 就绪后再播
+    const waitAndPlay = setInterval(() => {
+      if (spotifyController) {
+        clearInterval(waitAndPlay);
+        spotifyController.loadUri(uri);
+        openPlayer();
+      }
+    }, 200);
+  }
+}
+
+skillTracks.forEach((el) => {
+  el.addEventListener('click', () => playSkillTrack(el));
+});
+
 // ---------- Contact：复制微信号/邮箱。联系方式不写在 HTML 里，在这儿
 // 用片段拼出来——爬虫批量扒静态源码时抓不到完整明文，真人点一下就复制 ----------
 

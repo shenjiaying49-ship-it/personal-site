@@ -182,7 +182,7 @@
 <section class="skills js-reveal" id="skills">
   <div class="skills__collage">
 
-    <div class="skills__card skills__card--1">
+    <div class="skills__card skills__card--1 js-skill-track" data-spotify-uri="spotify:track:0HPKt1krGch04gEJgzIVw6" data-track-title="Music">
       <span class="skills__card-inner">
         <img class="skills__card-photo" src="assets/skills/music.jpg?v=4" alt="">
         <span class="skills__card-label">Music</span>
@@ -196,7 +196,7 @@
       </span>
     </div>
 
-    <div class="skills__card skills__card--2">
+    <div class="skills__card skills__card--2 js-skill-track" data-spotify-uri="spotify:track:0eAuGrXyGFYwur9ARUe7LJ" data-track-title="Coding">
       <span class="skills__card-inner">
         <img class="skills__card-photo" src="assets/skills/coding.jpg" alt="">
         <span class="skills__card-label">Coding</span>
@@ -210,7 +210,7 @@
       </span>
     </div>
 
-    <div class="skills__card skills__card--3">
+    <div class="skills__card skills__card--3 js-skill-track" data-spotify-uri="spotify:track:4KBx9DSSbFaumwlEqjX4CP" data-track-title="Dancing">
       <span class="skills__card-inner">
         <img class="skills__card-photo" src="assets/skills/dancing.jpg" alt="">
         <span class="skills__card-label">Dancing</span>
@@ -224,7 +224,7 @@
       </span>
     </div>
 
-    <div class="skills__card skills__card--4">
+    <div class="skills__card skills__card--4 js-skill-track" data-spotify-uri="spotify:track:2WdAV1VqmllcEznKlVOFxG" data-track-title="Reading">
       <span class="skills__card-inner">
         <img class="skills__card-photo" src="assets/skills/reading.jpg" alt="">
         <span class="skills__card-label">Reading</span>
@@ -252,7 +252,7 @@
       </span>
     </div>
 
-    <div class="skills__card skills__card--6">
+    <div class="skills__card skills__card--6 js-skill-track" data-spotify-uri="spotify:track:7x9aauaA9cu6tyfpHnqDLo" data-track-title="Design">
       <span class="skills__card-inner">
         <img class="skills__card-photo" src="assets/skills/design.jpg?v=3" alt="">
         <span class="skills__card-label">Design</span>
@@ -311,6 +311,20 @@
      Spotify 新标签页。用的是 Spotify 官方 iFrame Embed API（不是下载歌曲
      文件自建播放器——那样等于自己扒版权音乐重新分发，不合规）。 -->
 <!-- 侧边抽屉：点 logo 从右侧滑入，展示经历详情 + 图片 -->
+<div class="player js-player">
+  <div class="player__panel js-player-panel">
+    <div class="player__label">
+      <span class="player__note">♪</span>
+      <span class="player__title js-player-title">Music</span>
+    </div>
+    <div class="player__embed js-player-embed"></div>
+  </div>
+  <button class="player__fab js-player-fab" type="button" aria-label="播放/停止音乐" aria-expanded="false">
+    <span class="player__fab-icon player__fab-icon--note">♪</span>
+    <span class="player__fab-icon player__fab-icon--stop">✕</span>
+  </button>
+</div>
+
 <div class="project-drawer js-project-drawer" role="dialog" aria-modal="true" aria-label="经历详情" hidden>
   <div class="project-drawer__backdrop js-drawer-backdrop"></div>
   <div class="project-drawer__panel">
