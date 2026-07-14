@@ -410,6 +410,12 @@ const DEFAULT_TRACK = {
 let spotifyController = null;
 let spotifyScriptLoaded = false;
 
+// ♪ 按钮一进页面就显示，Spotify 脚本仍然懒加载（等首次点击）。
+// 千万别等 Spotify 就绪才显示按钮——那样脚本永远不会加载、按钮永远不出现。
+if (playerEl) {
+  requestAnimationFrame(() => playerEl.classList.add('is-ready'));
+}
+
 function loadSpotifyScript() {
   if (spotifyScriptLoaded) return;
   spotifyScriptLoaded = true;
