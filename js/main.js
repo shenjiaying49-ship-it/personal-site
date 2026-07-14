@@ -293,6 +293,11 @@ let stageActive = false;
 // 游走，把隐藏层自动扫出来。
 const isTouchDevice = window.matchMedia('(hover: none)').matches;
 
+// 手指正按在屏上拖动时为 true——这会关掉下面的自动巡游，改由手指喂坐标，
+// 让触屏也能像桌面端鼠标那样"手动探照"，松手后再恢复自动巡游。
+let touchDriving = false;
+let touchIdleTimer = null;
+
 if (isTouchDevice) {
   const heroVisibleObserver = new IntersectionObserver(
     (entries) => {
@@ -303,6 +308,10 @@ if (isTouchDevice) {
     { threshold: 0.25 }
   );
   heroVisibleObserver.observe(heroStage);
+
+  // 手机上把提示文案从"move your cursor"换成贴合触屏的说法
+  const catcherEl = document.querySelector('.s__catcher');
+  if (catcherEl) catcherEl.textContent = 'drag to reveal';
 }
 
 function moveCursorDot(x, y) {
@@ -329,9 +338,10 @@ function renderMask() {
 }
 
 function tick() {
-  // 触屏上没有 mousemove 喂 target，用时间驱动一条 Lissajous 曲线，
-  // 光斑自己在版面里慢慢转
-  if (isTouchDevice && stageActive) {
+  // 触屏上没有 mousemove 喂 target：手指没在拖的时候，用时间驱动一条
+  // Lissajous 曲线让光斑自己慢慢巡游；一旦手指按上来拖动，就交给触摸事件
+  // 直接喂坐标（touchDriving 为 true 时跳过这段自动巡游）。
+  if (isTouchDevice && stageActive && !touchDriving) {
     const t = performance.now();
     target.x = heroStage.offsetWidth * (0.5 + 0.32 * Math.cos(t * 0.00042));
     target.y = heroStage.offsetHeight * (0.44 + 0.28 * Math.sin(t * 0.00061));
@@ -359,6 +369,27 @@ heroStage.addEventListener('mouseenter', () => {
 heroStage.addEventListener('mouseleave', () => {
   stageActive = false;
 });
+
+// 触屏：手指在 Hero 上滑动时，光斑跟着手指走（跟桌面端鼠标一个手感）。
+// 不 preventDefault——让页面照常能上下滚动，滚动手势顺带把光斑扫出来，
+// 反而更灵动。松手 1.2s 后恢复自动巡游。
+function feedTouch(e) {
+  const touch = e.touches[0];
+  if (!touch) return;
+  const rect = heroStage.getBoundingClientRect();
+  target.x = touch.clientX - rect.left;
+  target.y = touch.clientY - rect.top;
+  stageActive = true;
+  touchDriving = true;
+  clearTimeout(touchIdleTimer);
+}
+
+heroStage.addEventListener('touchstart', feedTouch, { passive: true });
+heroStage.addEventListener('touchmove', feedTouch, { passive: true });
+heroStage.addEventListener('touchend', () => {
+  // 松手后留一小段再交还给自动巡游，避免一放手光斑就"跳走"
+  touchIdleTimer = setTimeout(() => { touchDriving = false; }, 1200);
+}, { passive: true });
 
 
 // ---------- 悬浮播放器：右下角小圆按钮，点才展开。Spotify 脚本懒加载——
